@@ -18,22 +18,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final Map<UUID, Employee> employeeStore = new ConcurrentHashMap<>();
 
     public EmployeeServiceImpl() {
-        UUID initialId = UUID.randomUUID();
-        employeeStore.put(
-                initialId,
-                new Employee(
-                        initialId,
-                        "Alex",
-                        "Morgan",
-                        "alex.morgan@company.com",
-                        "Security Analyst",
-                        "SecOps",
-                        Instant.now()));
+        addEmployee("Alex", "Morgan", "alex.morgan@company.com", "Security Analyst", "SecOps");
     }
+
 
     @Override
     public List<Employee> getAllEmployees() {
         return new ArrayList<>(employeeStore.values());
+
     }
 
     @Override
@@ -41,19 +33,28 @@ public class EmployeeServiceImpl implements EmployeeService {
         return Optional.ofNullable(employeeStore.get(uuid));
     }
 
+
     @Override
     public Employee createEmployee(CreateEmployeeRequest request) {
         UUID newId = UUID.randomUUID();
-        Employee newEmployee =
-                new Employee(
-                        newId,
-                        request.firstName(),
-                        request.lastName(),
-                        request.email(),
-                        request.title(),
-                        request.department(),
-                        Instant.now());
+
+        Employee newEmployee = new Employee(
+                newId,
+                request.firstName(),
+                request.lastName(),
+                request.email(),
+                request.title(),
+                request.department(),
+                Instant.now());
+
         employeeStore.put(newId, newEmployee);
         return newEmployee;
     }
+
+
+    private void addEmployee(String firstName, String lastName, String email, String title, String department) {
+        UUID uuid = UUID.randomUUID();
+        employeeStore.put(uuid, new Employee(uuid, firstName, lastName, email, title, department, Instant.now()));
+    }
+    
 }

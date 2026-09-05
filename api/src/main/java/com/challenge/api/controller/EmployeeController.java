@@ -11,8 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,14 +36,12 @@ public class EmployeeController {
         return employeeService
                 .getEmployeeByUuid(uuid)
                 .map(ResponseEntity::ok)
-                .orElseThrow(
-                        () -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, "Employee not found with UUID: " + uuid));
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with UUID: " + uuid));
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(
-            @Valid @RequestBody CreateEmployeeRequest request) {
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
         Employee created = employeeService.createEmployee(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
